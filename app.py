@@ -10,7 +10,12 @@ load_dotenv()
 
 app = Flask(__name__, static_folder='.', static_url_path='')
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-secret')
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+
+# Railway uses postgres:// but SQLAlchemy needs postgresql://
+database_url = os.getenv('DATABASE_URL', '')
+if database_url.startswith('postgres://'):
+    database_url = database_url.replace('postgres://', 'postgresql://', 1)
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -170,9 +175,13 @@ def handle_disconnect():
     print('Client disconnected')
 
 
+# ─── Auto-create tables ──────────────────────────────────
+
+with app.app_context():
+    db.create_all()
+
 # ─── Run ──────────────────────────────────────────────────
 
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
-    socketio.run(app, host='0.0.0.0', port=5000, debug=True)
+    port = int(os.getenv('PORT', 5000))
+    socketio.run(app, host='0.0.0.0', port=port, debug=True)
