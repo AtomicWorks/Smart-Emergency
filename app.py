@@ -175,9 +175,12 @@ def handle_disconnect():
     print('Client disconnected')
 
 
-# ─── Auto-create tables ──────────────────────────────────
+# ─── Auto-create tables on first request ─────────────────
 
-with app.app_context():
+@app.before_request
+def create_tables():
+    # Run only once
+    app.before_request_funcs[None].remove(create_tables)
     db.create_all()
 
 # ─── Run ──────────────────────────────────────────────────
