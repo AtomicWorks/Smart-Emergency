@@ -421,121 +421,22 @@
         <!-- Tab Content: Status Timeline -->
         <div id="tab-timeline" class="tab-content hidden">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-                <!-- Emergency Timeline Card (matches screenshot) -->
+                <!-- Emergency Timeline Card (dynamic) -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 card-hover">
                     <div class="flex items-center justify-between mb-6">
                         <h2 class="text-lg font-bold text-gray-900">Emergency Timeline</h2>
-                        <span class="text-xs text-gray-400 font-medium">Request #1042</span>
+                        <span id="timeline-request-id" class="text-xs text-gray-400 font-medium">Request #1042</span>
                     </div>
-                    <div class="relative">
-                        <!-- Timeline line -->
-                        <div class="absolute left-5 top-10 bottom-4 w-0.5 bg-gray-200"></div>
-
-                        <!-- Event 1: Request Created -->
-                        <div class="relative flex items-start gap-4 pb-8 timeline-item">
-                            <div
-                                class="relative z-10 w-10 h-10 rounded-full bg-brand-100 border-2 border-brand-300 flex items-center justify-center flex-shrink-0">
-                                <svg class="w-5 h-5 text-brand-600" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </div>
-                            <div class="flex-1 pt-1">
-                                <div class="flex items-center justify-between">
-                                    <h3 class="text-sm font-bold text-gray-900">Request Created</h3>
-                                    <span class="text-sm text-gray-500 font-medium">10:30 AM, 12 Feb</span>
-                                </div>
-                                <p class="text-xs text-gray-400 mt-1">Emergency blood request submitted to the system
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- Event 2: Accepted by Helper -->
-                        <div class="relative flex items-start gap-4 pb-8 timeline-item" style="animation-delay: 0.1s;">
-                            <div
-                                class="relative z-10 w-10 h-10 rounded-full bg-success-100 border-2 border-success-300 flex items-center justify-center flex-shrink-0">
-                                <svg class="w-5 h-5 text-success-600" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M5 13l4 4L19 7" />
-                                </svg>
-                            </div>
-                            <div class="flex-1 pt-1">
-                                <div class="flex items-center justify-between">
-                                    <h3 class="text-sm font-bold text-gray-900">Accepted by Helper</h3>
-                                    <span class="text-sm text-gray-500 font-medium">10:45 AM, 12 Feb</span>
-                                </div>
-                                <p class="text-xs text-gray-400 mt-1">Dr. Rahim Ahmed accepted the request</p>
-                            </div>
-                        </div>
-
-                        <!-- Event 3: Completed -->
-                        <div class="relative flex items-start gap-4 timeline-item" style="animation-delay: 0.2s;">
-                            <div
-                                class="relative z-10 w-10 h-10 rounded-full bg-success-100 border-2 border-success-300 flex items-center justify-center flex-shrink-0">
-                                <svg class="w-5 h-5 text-success-600" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M5 13l4 4L19 7" />
-                                </svg>
-                            </div>
-                            <div class="flex-1 pt-1">
-                                <div class="flex items-center justify-between">
-                                    <h3 class="text-sm font-bold text-gray-900">Completed</h3>
-                                    <span class="text-sm text-gray-500 font-medium">11:30 AM, 12 Feb</span>
-                                </div>
-                                <p class="text-xs text-gray-400 mt-1">Blood delivered and request marked as completed
-                                </p>
-                            </div>
-                        </div>
+                    <div id="timeline-events" class="relative">
+                        <!-- Dynamic timeline events rendered by JS -->
                     </div>
                 </div>
 
-                <!-- Request Details Card -->
+                <!-- Request Details Card (dynamic) -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 card-hover">
                     <h2 class="text-lg font-bold text-gray-900 mb-5">Request Details</h2>
-                    <div class="space-y-4">
-                        <div class="bg-gray-50 rounded-lg p-4">
-                            <h3 class="font-bold text-gray-900 mb-1">Blood Request</h3>
-                            <div class="flex items-center gap-2 mb-3">
-                                <span class="px-2.5 py-0.5 text-xs font-bold rounded-full bg-red-100 text-red-700">High
-                                    Urgency</span>
-                            </div>
-                            <div class="flex items-center gap-1.5 text-sm text-gray-600 mb-3">
-                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                </svg>
-                                Dhaka, Bangladesh
-                            </div>
-                            <p class="text-sm text-gray-600 p-3 bg-white rounded-lg border border-gray-200">Need AB+
-                                blood urgently at Dhaka Medical. Please respond quickly.</p>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-3">
-                            <div class="bg-gray-50 rounded-lg p-3 text-center">
-                                <p class="text-xs text-gray-400 mb-1">Response Time</p>
-                                <p class="text-lg font-bold text-success-600">15 min</p>
-                            </div>
-                            <div class="bg-gray-50 rounded-lg p-3 text-center">
-                                <p class="text-xs text-gray-400 mb-1">Total Time</p>
-                                <p class="text-lg font-bold text-gray-900">1h 00m</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center gap-2 pt-2">
-                            <span
-                                class="px-3 py-1.5 text-xs font-bold rounded-full bg-green-100 text-green-700 flex items-center gap-1.5">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M5 13l4 4L19 7" />
-                                </svg>
-                                Completed
-                            </span>
-                        </div>
+                    <div id="request-details" class="space-y-4">
+                        <!-- Dynamic details rendered by JS -->
                     </div>
                 </div>
             </div>
@@ -544,12 +445,147 @@
     </main>
 
     <script>
+        // ─── Request Data ────────────────────────────────────
+        const requestData = {
+            '1042': {
+                id: '#1042', type: 'Blood', status: 'completed', urgency: 'High', urgencyColor: 'red',
+                location: 'Dhaka Medical', locationFull: 'Dhaka, Bangladesh',
+                description: 'Need AB+ blood urgently at Dhaka Medical. Please respond quickly.',
+                date: '12 Feb', responseTime: '15 min', totalTime: '1h 00m',
+                timeline: [
+                    { title: 'Request Created', time: '10:30 AM, 12 Feb', desc: 'Emergency blood request submitted to the system', icon: 'clock', color: 'brand' },
+                    { title: 'Accepted by Helper', time: '10:45 AM, 12 Feb', desc: 'Dr. Rahim Ahmed accepted the request', icon: 'check', color: 'success' },
+                    { title: 'Completed', time: '11:30 AM, 12 Feb', desc: 'Blood delivered and request marked as completed', icon: 'check', color: 'success' }
+                ]
+            },
+            '1038': {
+                id: '#1038', type: 'Ambulance', status: 'accepted', urgency: 'Medium', urgencyColor: 'orange',
+                location: 'Chittagong GEC', locationFull: 'Chittagong, Bangladesh',
+                description: 'Ambulance needed for patient transfer from GEC area to Chittagong Medical.',
+                date: '11 Feb', responseTime: '8 min', totalTime: 'In progress',
+                timeline: [
+                    { title: 'Request Created', time: '2:00 PM, 11 Feb', desc: 'Ambulance request submitted to the system', icon: 'clock', color: 'brand' },
+                    { title: 'Accepted by Helper', time: '2:08 PM, 11 Feb', desc: 'Arif Hossain accepted the request', icon: 'check', color: 'success' },
+                    { title: 'Awaiting Completion', time: 'Pending', desc: 'Helper is en route to the location', icon: 'dots', color: 'warning' }
+                ]
+            },
+            '1035': {
+                id: '#1035', type: 'Oxygen', status: 'completed', urgency: 'High', urgencyColor: 'red',
+                location: 'Sylhet MAG', locationFull: 'Sylhet, Bangladesh',
+                description: 'Oxygen cylinder needed for ICU patient at MAG Osmani Medical.',
+                date: '10 Feb', responseTime: '12 min', totalTime: '45 min',
+                timeline: [
+                    { title: 'Request Created', time: '1:15 PM, 10 Feb', desc: 'Oxygen supply request submitted to the system', icon: 'clock', color: 'brand' },
+                    { title: 'Accepted by Helper', time: '1:27 PM, 10 Feb', desc: 'Nusrat Jahan accepted the request', icon: 'check', color: 'success' },
+                    { title: 'Completed', time: '2:00 PM, 10 Feb', desc: 'Oxygen delivered and request marked as completed', icon: 'check', color: 'success' }
+                ]
+            },
+            '1031': {
+                id: '#1031', type: 'Blood', status: 'cancelled', urgency: 'Low', urgencyColor: 'yellow',
+                location: 'Rajshahi Medical', locationFull: 'Rajshahi, Bangladesh',
+                description: 'Blood donation required for surgery patient at Rajshahi Medical College.',
+                date: '8 Feb', responseTime: '—', totalTime: '—',
+                timeline: [
+                    { title: 'Request Created', time: '9:00 AM, 8 Feb', desc: 'Blood request submitted to the system', icon: 'clock', color: 'brand' },
+                    { title: 'Cancelled', time: '9:45 AM, 8 Feb', desc: 'Request cancelled by the requester — no longer needed', icon: 'x', color: 'danger' }
+                ]
+            },
+            '1027': {
+                id: '#1027', type: 'Ambulance', status: 'pending', urgency: 'Medium', urgencyColor: 'orange',
+                location: 'Khulna Sadar', locationFull: 'Khulna, Bangladesh',
+                description: 'Ambulance needed for elderly patient at Khulna Sadar Hospital.',
+                date: '7 Feb', responseTime: '—', totalTime: '—',
+                timeline: [
+                    { title: 'Request Created', time: '11:30 AM, 7 Feb', desc: 'Ambulance request submitted to the system', icon: 'clock', color: 'brand' },
+                    { title: 'Waiting for Helper', time: 'Pending', desc: 'No helper has accepted this request yet', icon: 'dots', color: 'warning' }
+                ]
+            }
+        };
+
+        // ─── Icon SVGs ───────────────────────────────────────
+        const icons = {
+            clock: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
+            check: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>`,
+            x: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>`,
+            dots: `<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><circle cx="5" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>`
+        };
+
+        const colorMap = {
+            brand:   { bg: 'bg-red-100',    border: 'border-red-300',    text: 'text-red-600' },
+            success: { bg: 'bg-green-100',  border: 'border-green-300',  text: 'text-green-600' },
+            warning: { bg: 'bg-yellow-100', border: 'border-yellow-300', text: 'text-yellow-600' },
+            danger:  { bg: 'bg-red-100',    border: 'border-red-400',    text: 'text-red-600' }
+        };
+
+        const statusBadge = {
+            completed: { label: '✓ Completed', bg: 'bg-green-100',  text: 'text-green-700' },
+            accepted:  { label: '⟳ Accepted',  bg: 'bg-blue-100',   text: 'text-blue-700' },
+            cancelled: { label: '✕ Cancelled', bg: 'bg-gray-100',   text: 'text-gray-600' },
+            pending:   { label: '● Pending',   bg: 'bg-yellow-100', text: 'text-yellow-700' }
+        };
+
+        // ─── Render Functions ────────────────────────────────
+        function renderTimeline(data) {
+            const container = document.getElementById('timeline-events');
+            document.getElementById('timeline-request-id').textContent = 'Request ' + data.id;
+
+            let html = `<div class="absolute left-5 top-10 bottom-4 w-0.5 bg-gray-200"></div>`;
+            data.timeline.forEach((evt, i) => {
+                const c = colorMap[evt.color];
+                const isLast = i === data.timeline.length - 1;
+                html += `
+                <div class="relative flex items-start gap-4 ${isLast ? '' : 'pb-8'} timeline-item" style="animation-delay: ${i * 0.1}s;">
+                    <div class="relative z-10 w-10 h-10 rounded-full ${c.bg} border-2 ${c.border} flex items-center justify-center flex-shrink-0">
+                        <span class="${c.text}">${icons[evt.icon]}</span>
+                    </div>
+                    <div class="flex-1 pt-1">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-sm font-bold text-gray-900">${evt.title}</h3>
+                            <span class="text-sm text-gray-500 font-medium">${evt.time}</span>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-1">${evt.desc}</p>
+                    </div>
+                </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function renderDetails(data) {
+            const badge = statusBadge[data.status];
+            const urgBg = { red: 'bg-red-100 text-red-700', orange: 'bg-orange-100 text-orange-700', yellow: 'bg-yellow-100 text-yellow-700' };
+            document.getElementById('request-details').innerHTML = `
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <h3 class="font-bold text-gray-900 mb-1">${data.type} Request</h3>
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="px-2.5 py-0.5 text-xs font-bold rounded-full ${urgBg[data.urgencyColor]}">${data.urgency} Urgency</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 text-sm text-gray-600 mb-3">
+                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                        </svg>
+                        ${data.locationFull}
+                    </div>
+                    <p class="text-sm text-gray-600 p-3 bg-white rounded-lg border border-gray-200">${data.description}</p>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-gray-50 rounded-lg p-3 text-center">
+                        <p class="text-xs text-gray-400 mb-1">Response Time</p>
+                        <p class="text-lg font-bold ${data.responseTime === '—' ? 'text-gray-400' : 'text-green-600'}">${data.responseTime}</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-3 text-center">
+                        <p class="text-xs text-gray-400 mb-1">Total Time</p>
+                        <p class="text-lg font-bold text-gray-900">${data.totalTime}</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 pt-2">
+                    <span class="px-3 py-1.5 text-xs font-bold rounded-full ${badge.bg} ${badge.text}">${badge.label}</span>
+                </div>`;
+        }
+
+        // ─── Tab & Navigation ────────────────────────────────
         function showTab(tabName, button) {
-            // Hide all tab content
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            // Show selected tab
             document.getElementById('tab-' + tabName).classList.remove('hidden');
-            // Update tab styles
             document.querySelectorAll('[onclick^="showTab"]').forEach(btn => {
                 btn.className = btn.className.replace('tab-active', 'tab-inactive');
             });
@@ -557,10 +593,16 @@
         }
 
         function showRequestTimeline(requestId) {
-            // Switch to timeline tab
+            const data = requestData[requestId];
+            if (!data) return;
+            renderTimeline(data);
+            renderDetails(data);
             const timelineBtn = document.querySelectorAll('[onclick^="showTab"]')[3];
             showTab('timeline', timelineBtn);
         }
+
+        // Render default timeline on load
+        document.addEventListener('DOMContentLoaded', () => showRequestTimeline('1042'));
     </script>
 
 </body>

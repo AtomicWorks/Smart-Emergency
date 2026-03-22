@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -101,13 +102,15 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center gap-2">
-                    <div class="w-9 h-9 bg-brand-600 rounded-lg flex items-center justify-center">
-                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                        </svg>
-                    </div>
-                    <span class="text-lg font-bold text-gray-900">Smart Emergency</span>
+                    <a href="/" class="flex items-center gap-2">
+                        <div class="w-9 h-9 bg-brand-600 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                        </div>
+                        <span class="text-lg font-bold text-gray-900">Smart Emergency</span>
+                    </a>
                 </div>
                 <div class="flex items-center gap-4">
                     <button
@@ -162,11 +165,11 @@
                 </div>
                 <div class="flex items-center gap-4">
                     <span id="statusLabel"
-                        class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Offline</span>
+                        class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Loading...</span>
                     <div class="relative inline-block w-14 align-middle select-none">
                         <input type="checkbox" id="availabilityToggle"
                             class="toggle-checkbox absolute block w-7 h-7 rounded-full bg-white border-2 border-gray-300 appearance-none cursor-pointer top-0.5 left-0.5 checked:left-auto"
-                            onchange="toggleAvailability(this)" />
+                            onchange="toggleAvailability()" />
                         <label for="availabilityToggle"
                             class="toggle-label block overflow-hidden h-8 rounded-full bg-gray-300 cursor-pointer"></label>
                     </div>
@@ -176,8 +179,7 @@
             <div id="statusBar"
                 class="mt-4 p-3 rounded-lg bg-gray-50 border border-gray-200 flex items-center gap-3 transition-all duration-300">
                 <div id="statusDot" class="w-3 h-3 rounded-full bg-gray-400"></div>
-                <span id="statusText" class="text-sm text-gray-600">You are currently <strong>offline</strong>. Toggle
-                    to start receiving emergency requests.</span>
+                <span id="statusText" class="text-sm text-gray-600">Loading availability status...</span>
             </div>
         </div>
 
@@ -199,14 +201,8 @@
                     </span>
                 </div>
                 <h3 class="text-sm font-medium text-gray-500">Active Emergencies</h3>
-                <p class="text-3xl font-bold text-gray-900 mt-1 counter-animate" id="activeCount">12</p>
-                <p class="text-xs text-brand-600 mt-2 flex items-center gap-1">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M5 10l7-7m0 0l7 7m-7-7v18" />
-                    </svg>
-                    +3 in last hour
-                </p>
+                <p class="text-3xl font-bold text-gray-900 mt-1 counter-animate" id="activeCount">--</p>
+                <p class="text-xs text-gray-400 mt-2">From database</p>
             </div>
 
             <!-- Available Helpers -->
@@ -225,14 +221,8 @@
                     </span>
                 </div>
                 <h3 class="text-sm font-medium text-gray-500">Available Helpers</h3>
-                <p class="text-3xl font-bold text-gray-900 mt-1 counter-animate" id="helperCount">24</p>
-                <p class="text-xs text-success-600 mt-2 flex items-center gap-1">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M5 10l7-7m0 0l7 7m-7-7v18" />
-                    </svg>
-                    +5 since morning
-                </p>
+                <p class="text-3xl font-bold text-gray-900 mt-1 counter-animate" id="helperCount">--</p>
+                <p class="text-xs text-gray-400 mt-2">From database</p>
             </div>
 
             <!-- Pending Requests -->
@@ -251,14 +241,8 @@
                     </span>
                 </div>
                 <h3 class="text-sm font-medium text-gray-500">Pending Requests</h3>
-                <p class="text-3xl font-bold text-gray-900 mt-1 counter-animate" id="pendingCount">7</p>
-                <p class="text-xs text-warning-600 mt-2 flex items-center gap-1">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                    </svg>
-                    -2 from yesterday
-                </p>
+                <p class="text-3xl font-bold text-gray-900 mt-1 counter-animate" id="pendingCount">--</p>
+                <p class="text-xs text-gray-400 mt-2">From database</p>
             </div>
         </div>
 
@@ -273,7 +257,7 @@
                 </span>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="helpersList">
-                <!-- Helper cards will be populated by JS -->
+                <p class="text-sm text-gray-400 col-span-full text-center py-4">Loading helpers from database...</p>
             </div>
         </div>
 
@@ -285,28 +269,101 @@
                     class="text-xs font-medium text-brand-600 bg-brand-50 px-3 py-1.5 rounded-full">Auto-updating</span>
             </div>
             <div class="space-y-3" id="activityFeed">
-                <!-- Activity items populated by JS -->
+                <p class="text-sm text-gray-400 text-center py-4">Loading activity from database...</p>
             </div>
         </div>
 
     </main>
 
     <script>
-        // Mock helpers data
-        const helpers = [
-            { name: 'Dr. Rahim Ahmed', role: 'Blood Donor (A+)', location: 'Dhaka', online: true, avatar: 'RA' },
-            { name: 'Fatima Khatun', role: 'First Responder', location: 'Chittagong', online: true, avatar: 'FK' },
-            { name: 'Arif Hossain', role: 'Ambulance Driver', location: 'Dhaka', online: true, avatar: 'AH' },
-            { name: 'Nusrat Jahan', role: 'Oxygen Supplier', location: 'Sylhet', online: true, avatar: 'NJ' },
-            { name: 'Kamal Uddin', role: 'Blood Donor (O-)', location: 'Rajshahi', online: true, avatar: 'KU' },
-            { name: 'Sadia Islam', role: 'First Responder', location: 'Dhaka', online: true, avatar: 'SI' },
-        ];
+        // ─── Config ──────────────────────────────────────────
+        const API_BASE = window.location.origin;
+        const CURRENT_HELPER_ID = 1; // simulate logged-in user as Dr. Rahim Ahmed
+        const socket = io(API_BASE);
 
         const colors = ['bg-blue-500', 'bg-purple-500', 'bg-emerald-500', 'bg-orange-500', 'bg-pink-500', 'bg-teal-500'];
 
-        // Render helpers
-        function renderHelpers() {
+        // ─── Load Dashboard Data ─────────────────────────────
+        async function loadDashboard() {
+            try {
+                const res = await fetch(`${API_BASE}/api/dashboard`);
+                const data = await res.json();
+                document.getElementById('activeCount').textContent = data.active_emergencies;
+                document.getElementById('helperCount').textContent = data.available_helpers;
+                document.getElementById('pendingCount').textContent = data.pending_requests;
+            } catch (err) {
+                console.error('Failed to load dashboard:', err);
+            }
+        }
+
+        // ─── Load Availability Status ────────────────────────
+        async function loadAvailability() {
+            try {
+                const res = await fetch(`${API_BASE}/api/availability/${CURRENT_HELPER_ID}`);
+                const data = await res.json();
+                const toggle = document.getElementById('availabilityToggle');
+                toggle.checked = data.is_online;
+                updateStatusUI(data.is_online);
+            } catch (err) {
+                console.error('Failed to load availability:', err);
+            }
+        }
+
+        // ─── Toggle Availability ─────────────────────────────
+        async function toggleAvailability() {
+            try {
+                const res = await fetch(`${API_BASE}/api/availability/${CURRENT_HELPER_ID}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const data = await res.json();
+                updateStatusUI(data.is_online);
+            } catch (err) {
+                console.error('Failed to toggle availability:', err);
+                // revert the toggle on error
+                const toggle = document.getElementById('availabilityToggle');
+                toggle.checked = !toggle.checked;
+            }
+        }
+
+        function updateStatusUI(isOnline) {
+            const statusLabel = document.getElementById('statusLabel');
+            const statusBar = document.getElementById('statusBar');
+            const statusDot = document.getElementById('statusDot');
+            const statusText = document.getElementById('statusText');
+
+            if (isOnline) {
+                statusLabel.textContent = 'Online';
+                statusLabel.className = 'text-sm font-semibold text-success-600 uppercase tracking-wider';
+                statusBar.className = 'mt-4 p-3 rounded-lg bg-success-50 border border-success-200 flex items-center gap-3 transition-all duration-300';
+                statusDot.className = 'w-3 h-3 rounded-full bg-success-500 pulse-dot';
+                statusText.innerHTML = 'You are <strong class="text-success-700">online</strong> and receiving emergency requests.';
+            } else {
+                statusLabel.textContent = 'Offline';
+                statusLabel.className = 'text-sm font-semibold text-gray-400 uppercase tracking-wider';
+                statusBar.className = 'mt-4 p-3 rounded-lg bg-gray-50 border border-gray-200 flex items-center gap-3 transition-all duration-300';
+                statusDot.className = 'w-3 h-3 rounded-full bg-gray-400';
+                statusText.innerHTML = 'You are currently <strong>offline</strong>. Toggle to start receiving emergency requests.';
+            }
+        }
+
+        // ─── Load Helpers ────────────────────────────────────
+        async function loadHelpers() {
+            try {
+                const res = await fetch(`${API_BASE}/api/helpers?online=true`);
+                const helpers = await res.json();
+                renderHelpers(helpers);
+            } catch (err) {
+                console.error('Failed to load helpers:', err);
+            }
+        }
+
+        function renderHelpers(helpers) {
             const container = document.getElementById('helpersList');
+            if (helpers.length === 0) {
+                container.innerHTML = '<p class="text-sm text-gray-400 col-span-full text-center py-4">No helpers currently online</p>';
+                return;
+            }
             container.innerHTML = helpers.map((h, i) => `
                 <div class="flex items-center gap-3 p-3.5 rounded-lg border border-gray-100 hover:border-success-200 hover:bg-success-50/30 transition-all duration-200">
                     <div class="relative">
@@ -327,75 +384,80 @@
             `).join('');
         }
 
-        // Activity feed data
-        const activities = [
-            { type: 'online', text: 'Dr. Rahim Ahmed came online', time: '2 min ago', icon: '🟢' },
-            { type: 'accepted', text: 'Blood request #1042 accepted by Fatima Khatun', time: '5 min ago', icon: '✅' },
-            { type: 'new', text: 'New emergency: Oxygen needed at Sylhet Medical', time: '8 min ago', icon: '🚨' },
-            { type: 'completed', text: 'Ambulance request #1039 marked as completed', time: '12 min ago', icon: '🏁' },
-            { type: 'offline', text: 'Kamal Uddin went offline', time: '15 min ago', icon: '🔴' },
-            { type: 'online', text: 'Sadia Islam came online', time: '20 min ago', icon: '🟢' },
-        ];
+        // ─── Load Activity Feed ──────────────────────────────
+        async function loadActivity() {
+            try {
+                const res = await fetch(`${API_BASE}/api/activity?limit=10`);
+                const activities = await res.json();
+                renderActivities(activities);
+            } catch (err) {
+                console.error('Failed to load activity:', err);
+            }
+        }
 
-        function renderActivities() {
+        function timeAgo(isoString) {
+            const diff = Date.now() - new Date(isoString + 'Z').getTime();
+            const mins = Math.floor(diff / 60000);
+            if (mins < 1) return 'Just now';
+            if (mins < 60) return `${mins} min ago`;
+            const hrs = Math.floor(mins / 60);
+            if (hrs < 24) return `${hrs}h ago`;
+            return `${Math.floor(hrs / 24)}d ago`;
+        }
+
+        function renderActivities(activities) {
             const container = document.getElementById('activityFeed');
+            if (activities.length === 0) {
+                container.innerHTML = '<p class="text-sm text-gray-400 text-center py-4">No recent activity</p>';
+                return;
+            }
             container.innerHTML = activities.map(a => `
                 <div class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors status-update">
                     <span class="text-lg">${a.icon}</span>
                     <p class="text-sm text-gray-700 flex-1">${a.text}</p>
-                    <span class="text-xs text-gray-400 whitespace-nowrap">${a.time}</span>
+                    <span class="text-xs text-gray-400 whitespace-nowrap">${timeAgo(a.created_at)}</span>
                 </div>
             `).join('');
         }
 
-        // Toggle availability
-        function toggleAvailability(checkbox) {
-            const statusLabel = document.getElementById('statusLabel');
-            const statusBar = document.getElementById('statusBar');
-            const statusDot = document.getElementById('statusDot');
-            const statusText = document.getElementById('statusText');
+        // ─── SocketIO Real-Time Listeners ────────────────────
+        socket.on('connect', () => {
+            console.log('SocketIO connected');
+        });
 
-            if (checkbox.checked) {
-                statusLabel.textContent = 'Online';
-                statusLabel.className = 'text-sm font-semibold text-success-600 uppercase tracking-wider';
-                statusBar.className = 'mt-4 p-3 rounded-lg bg-success-50 border border-success-200 flex items-center gap-3 transition-all duration-300';
-                statusDot.className = 'w-3 h-3 rounded-full bg-success-500 pulse-dot';
-                statusText.innerHTML = 'You are <strong class="text-success-700">online</strong> and receiving emergency requests.';
-            } else {
-                statusLabel.textContent = 'Offline';
-                statusLabel.className = 'text-sm font-semibold text-gray-400 uppercase tracking-wider';
-                statusBar.className = 'mt-4 p-3 rounded-lg bg-gray-50 border border-gray-200 flex items-center gap-3 transition-all duration-300';
-                statusDot.className = 'w-3 h-3 rounded-full bg-gray-400';
-                statusText.innerHTML = 'You are currently <strong>offline</strong>. Toggle to start receiving emergency requests.';
-            }
-        }
+        socket.on('availability_changed', (helper) => {
+            // reload helpers list and dashboard when any helper toggles
+            loadHelpers();
+            loadDashboard();
+        });
 
-        // Simulate real-time counter updates
-        function simulateUpdates() {
-            setInterval(() => {
-                const activeEl = document.getElementById('activeCount');
-                const helperEl = document.getElementById('helperCount');
-                const pendingEl = document.getElementById('pendingCount');
+        socket.on('dashboard_update', (data) => {
+            document.getElementById('activeCount').textContent = data.active_emergencies;
+            document.getElementById('helperCount').textContent = data.available_helpers;
+            document.getElementById('pendingCount').textContent = data.pending_requests;
+        });
 
-                const active = parseInt(activeEl.textContent);
-                const helpers = parseInt(helperEl.textContent);
-                const pending = parseInt(pendingEl.textContent);
+        socket.on('activity_update', (activity) => {
+            // prepend the new activity to the feed
+            const container = document.getElementById('activityFeed');
+            const noDataMsg = container.querySelector('p.text-center');
+            if (noDataMsg) container.innerHTML = '';
 
-                const r = Math.random();
-                if (r < 0.33) {
-                    activeEl.textContent = Math.max(5, active + (Math.random() > 0.5 ? 1 : -1));
-                } else if (r < 0.66) {
-                    helperEl.textContent = Math.max(10, helpers + (Math.random() > 0.4 ? 1 : -1));
-                } else {
-                    pendingEl.textContent = Math.max(2, pending + (Math.random() > 0.5 ? 1 : -1));
-                }
-            }, 3000);
-        }
+            const div = document.createElement('div');
+            div.className = 'flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors status-update';
+            div.innerHTML = `
+                <span class="text-lg">${activity.icon}</span>
+                <p class="text-sm text-gray-700 flex-1">${activity.text}</p>
+                <span class="text-xs text-gray-400 whitespace-nowrap">Just now</span>
+            `;
+            container.insertBefore(div, container.firstChild);
+        });
 
-        // Initialize
-        renderHelpers();
-        renderActivities();
-        simulateUpdates();
+        // ─── Initialize ─────────────────────────────────────
+        loadAvailability();
+        loadDashboard();
+        loadHelpers();
+        loadActivity();
     </script>
 
 </body>
